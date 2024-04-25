@@ -31,16 +31,16 @@ zvirata_dict = [
     {'jmeno': 'Karlík', 'druh': 'Lední medvěd', 'vaha': 700},
 ]
 
-zvirata = []
+zvirata_list = []
 for z in zvirata_dict:
     zvire = Zvire(z['jmeno'], z['druh'], z['vaha'])
-    zvirata.append(zvire)
+    zvirata_list.append(zvire)
 
 # kontrolni funkce pro vytisknutí listu zvirata:
 def vytisknout_zvirata(seznam_zvirat):
     for jedno_zvire in seznam_zvirat:
         print(jedno_zvire)
-vytisknout_zvirata(zvirata)
+vytisknout_zvirata(zvirata_list)
 
 # Zvire class
 zvire = Zvire('Láďa', 'Koala', 15)
@@ -108,10 +108,49 @@ class Reditel(Zamestnanec):
         return super().__str__() + f' Jeho oblibené zvíře je {self.oblibene_zvire.druh}.'
 
 # Priklad vytvoreni objektu (klidne zkopiruj)
-zvire = Zvire('Láďa', 'Koala', 15)
+zvire = Zvire('Láďa', 'Koala', 150)
 reditel = Reditel(cele_jmeno='Karel', rocni_plat=800_000, oblibene_zvire=zvire)
 assert reditel.pozice == 'Reditel'
 assert isinstance(reditel.oblibene_zvire, Zvire)
 print(reditel)
 
 # Trida ZOO
+class Zoo:
+    def __init__(self, jmeno:str, adresa:str, reditel: Reditel, zamestnanci: list[Zamestnanec], zvirata: list[Zvire]):
+        self.jmeno = jmeno
+        self.adresa = adresa
+        self.reditel = reditel
+        self.zamestnanci = zamestnanci
+        self.zvirata = zvirata
+
+    def vaha_vsech_zvirat_v_zoo(self):
+        vaha = int
+        vaha = sum(zvire.vaha for zvire in self.zvirata)
+        return vaha
+
+    def mesicni_naklady_na_zamestnance(self):
+        mzdy = sum(zamestnanec.rocni_plat for zamestnanec in self.zamestnanci)
+        celkove_mzdy = mzdy + self.reditel.rocni_plat
+        mesicni_celkove_mzdy = celkove_mzdy / 12
+        return mesicni_celkove_mzdy
+
+zoo = Zoo('ZOO Praha', 'U Trojského zámku 3/120', reditel, zamestnanci_list, zvirata_list)
+print(zoo)
+print(zoo.reditel)
+print('Celková váha zvířat v ZOO:', zoo.vaha_vsech_zvirat_v_zoo())
+print('Měsíční náklady na zaměstnance:', zoo.mesicni_naklady_na_zamestnance())
+
+# Zoo class
+zoo = Zoo('Zoo Praha', 'Praha', reditel, [zamestnanec], [zvire])
+assert hasattr(zoo, 'jmeno')
+assert hasattr(zoo, 'adresa')
+assert hasattr(zoo, 'reditel')
+assert hasattr(zoo, 'zamestnanci')
+assert hasattr(zoo, 'zvirata')
+assert isinstance(zoo.jmeno, str)
+assert isinstance(zoo.adresa, str)
+assert isinstance(zoo.reditel, Reditel)
+assert isinstance(zoo.zamestnanci, list)
+assert isinstance(zoo.zvirata, list)
+assert zoo.vaha_vsech_zvirat_v_zoo() == 150
+assert zoo.mesicni_naklady_na_zamestnance() == (zamestnanec.rocni_plat + reditel.rocni_plat) / 12
